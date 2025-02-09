@@ -24,7 +24,7 @@ func (c *Client) GetRedirectionHosts(ctx context.Context) (*resources.Redirectio
 		return nil, err
 	}
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func (c *Client) GetRedirectionHost(ctx context.Context, id *int64) (*resources.
 		return nil, err
 	}
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +75,7 @@ func (c *Client) CreateRedirectionHost(ctx context.Context, redirectionHost *inp
 
 	req.Header.Set(headers.ContentType, "application/json")
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +102,7 @@ func (c *Client) UpdateRedirectionHost(ctx context.Context, id *int64, redirecti
 
 	req.Header.Set(headers.ContentType, "application/json")
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
@@ -122,7 +122,7 @@ func (c *Client) DeleteRedirectionHost(ctx context.Context, id *int64) error {
 		return err
 	}
 
-	_, err = c.doRequest(req, nil)
+	_, err = c.doRequest(req)
 	if err != nil {
 		return err
 	}

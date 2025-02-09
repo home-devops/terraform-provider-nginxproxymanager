@@ -26,7 +26,7 @@ var CertificateLetsEncrypt = map[string]schema.Attribute{
 		Computed:    true,
 	},
 	"dns_challenge": schema.BoolAttribute{
-		Description: "Whether DNS challange should be used.",
+		Description: "Whether DNS challenge should be used.",
 		Optional:    true,
 		PlanModifiers: []planmodifier.Bool{
 			boolplanmodifier.RequiresReplace(),

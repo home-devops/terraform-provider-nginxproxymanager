@@ -22,7 +22,7 @@ func (c *Client) GetUsers(ctx context.Context) (*resources.UserCollection, error
 		return nil, err
 	}
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (c *Client) getUser(ctx context.Context, resource string) (*resources.User,
 		return nil, err
 	}
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}

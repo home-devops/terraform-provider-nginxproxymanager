@@ -46,7 +46,7 @@ func (c *Client) CreateCertificateCustom(ctx context.Context, certificateCustom 
 
 	req.Header.Set(headers.ContentType, "application/json")
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
@@ -89,7 +89,7 @@ func (c *Client) CreateCertificateLetsEncrypt(ctx context.Context, certificateLe
 
 	req.Header.Set(headers.ContentType, "application/json")
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +109,7 @@ func (c *Client) GetCertificates(ctx context.Context) (*resources.CertificateCol
 		return nil, err
 	}
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
@@ -129,7 +129,7 @@ func (c *Client) GetCertificateCustom(ctx context.Context, id *int64) (*resource
 		return nil, err
 	}
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
@@ -153,7 +153,7 @@ func (c *Client) GetCertificateLetsEncrypt(ctx context.Context, id *int64) (*res
 		return nil, err
 	}
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
@@ -205,7 +205,7 @@ func (c *Client) ValidateCertificate(ctx context.Context, certificate *inputs.Ce
 
 	req.Header.Set(headers.ContentType, writer.FormDataContentType())
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
@@ -253,7 +253,7 @@ func (c *Client) UploadCertificate(ctx context.Context, certificate *inputs.Cert
 
 	req.Header.Set(headers.ContentType, writer.FormDataContentType())
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
@@ -273,7 +273,7 @@ func (c *Client) DeleteCertificate(ctx context.Context, id *int64) error {
 		return err
 	}
 
-	_, err = c.doRequest(req, nil)
+	_, err = c.doRequest(req)
 	if err != nil {
 		return err
 	}

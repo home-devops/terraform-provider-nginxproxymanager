@@ -21,7 +21,7 @@ func (c *Client) GetAccessLists(ctx context.Context) (*resources.AccessListColle
 		return nil, err
 	}
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
@@ -41,7 +41,7 @@ func (c *Client) GetAccessList(ctx context.Context, id *int64) (*resources.Acces
 		return nil, err
 	}
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}

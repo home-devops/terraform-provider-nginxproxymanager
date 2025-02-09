@@ -20,7 +20,7 @@ func (c *Client) GetDeadHosts(ctx context.Context) (*resources.DeadHostCollectio
 		return nil, err
 	}
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +40,7 @@ func (c *Client) GetDeadHost(ctx context.Context, id *int64) (*resources.DeadHos
 		return nil, err
 	}
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}

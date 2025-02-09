@@ -21,7 +21,7 @@ var Users = map[string]schema.Attribute{
 		Description: "The users.",
 		Computed:    true,
 		NestedObject: schema.NestedAttributeObject{
-			Attributes: utils.MergeMaps(User, nestedCertificate),
+			Attributes: utils.MergeMaps(User, nestedUser),
 		},
 	},
 }

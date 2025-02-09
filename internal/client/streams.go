@@ -20,7 +20,7 @@ func (c *Client) GetStreams(ctx context.Context) (*resources.StreamCollection, e
 		return nil, err
 	}
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +40,7 @@ func (c *Client) GetStream(ctx context.Context, id *int64) (*resources.Stream, e
 		return nil, err
 	}
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}

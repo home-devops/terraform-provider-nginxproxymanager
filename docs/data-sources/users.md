@@ -32,7 +32,7 @@ Read-Only:
 - `avatar` (String) The avatar of the user.
 - `created_on` (String) The date and time the user was created.
 - `email` (String) The email of the user.
-- `id` (Number) The ID of the certificate.
+- `id` (Number) The ID of the user.
 - `is_disabled` (Boolean) Whether the user is disabled.
 - `meta` (Map of String) The meta data associated with the user.
 - `modified_on` (String) The date and time the user was last modified.

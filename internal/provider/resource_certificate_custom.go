@@ -18,6 +18,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 var (
@@ -51,7 +52,12 @@ func (r *CertificateCustomResource) Configure(ctx context.Context, req resource.
 		return
 	}
 
-	r.client = req.ProviderData.(*client.Client)
+	var ok bool
+	r.client, ok = req.ProviderData.(*client.Client)
+	if !ok {
+		tflog.Error(ctx, "ProviderData is not of type *client.Client")
+		return
+	}
 }
 
 func (r *CertificateCustomResource) CreateImpl(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

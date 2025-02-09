@@ -31,7 +31,7 @@ func (c *Client) CreateProxyHost(ctx context.Context, proxyHost *inputs.ProxyHos
 
 	req.Header.Set(headers.ContentType, "application/json")
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func (c *Client) GetProxyHosts(ctx context.Context) (*resources.ProxyHostCollect
 		return nil, err
 	}
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +71,7 @@ func (c *Client) GetProxyHost(ctx context.Context, id *int64) (*resources.ProxyH
 		return nil, err
 	}
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +102,7 @@ func (c *Client) UpdateProxyHost(ctx context.Context, id *int64, proxyHost *inpu
 
 	req.Header.Set(headers.ContentType, "application/json")
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
@@ -122,7 +122,7 @@ func (c *Client) DeleteProxyHost(ctx context.Context, id *int64) error {
 		return err
 	}
 
-	_, err = c.doRequest(req, nil)
+	_, err = c.doRequest(req)
 	if err != nil {
 		return err
 	}

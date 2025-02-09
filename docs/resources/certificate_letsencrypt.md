@@ -42,7 +42,7 @@ resource "npm_certificate_letsencrypt" "example2" {
 
 ### Optional
 
-- `dns_challenge` (Boolean) Whether DNS challange should be used.
+- `dns_challenge` (Boolean) Whether DNS challenge should be used.
 - `dns_provider` (String) DNS provider name to use.
 - `dns_provider_credentials` (String) DNS provider credentials to use.
 

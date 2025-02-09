@@ -47,12 +47,8 @@ func NewClient(url *string, username *string, password *string, version string) 
 	return &c, nil
 }
 
-func (c *Client) doRequest(req *http.Request, authToken *string) ([]byte, error) {
+func (c *Client) doRequest(req *http.Request) ([]byte, error) {
 	token := c.Token
-
-	if authToken != nil {
-		token = *authToken
-	}
 
 	req.Header.Set(headers.Authorization, fmt.Sprintf("Bearer %s", token))
 	req.Header.Set(headers.UserAgent, c.UserAgent)

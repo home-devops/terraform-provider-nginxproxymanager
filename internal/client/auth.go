@@ -7,9 +7,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/go-http-utils/headers"
 	"net/http"
 	"strings"
+
+	"github.com/go-http-utils/headers"
 )
 
 type AuthStruct struct {
@@ -43,7 +44,7 @@ func (c *Client) Authenticate(ctx context.Context, username, password *string) (
 
 	req.Header.Set(headers.ContentType, "application/json")
 
-	body, err := c.doRequest(req, nil)
+	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}

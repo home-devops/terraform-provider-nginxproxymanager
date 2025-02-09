@@ -14,6 +14,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 var (
@@ -40,12 +41,17 @@ func (d *VersionDataSource) SchemaImpl(_ context.Context, _ datasource.SchemaReq
 	}
 }
 
-func (d *VersionDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *VersionDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
 
-	d.client = req.ProviderData.(*client.Client)
+	var ok bool
+	d.client, ok = req.ProviderData.(*client.Client)
+	if !ok {
+		tflog.Error(ctx, "ProviderData is not of type *client.Client")
+		return
+	}
 }
 
 func (d *VersionDataSource) ReadImpl(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
