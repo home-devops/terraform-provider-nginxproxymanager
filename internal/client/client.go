@@ -23,7 +23,7 @@ type Client struct {
 func NewClient(url *string, username *string, password *string, version string) (*Client, error) {
 	c := Client{
 		HTTPClient: &http.Client{
-			Timeout:   10 * time.Second,
+			Timeout:   300 * time.Second,
 			Transport: http.DefaultTransport,
 		},
 		UserAgent: fmt.Sprintf("terraform-provider-nginxproxymanager/%s", version),
