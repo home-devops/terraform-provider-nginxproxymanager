@@ -5,6 +5,7 @@ package models
 
 import (
 	"context"
+	"encoding/json"
 	"strings"
 	"terraform-provider-nginxproxymanager/internal/client/inputs"
 	"terraform-provider-nginxproxymanager/internal/client/resources"
@@ -44,7 +45,11 @@ func (m *CertificateLetsEncrypt) Load(ctx context.Context, resource *resources.C
 	dnsChallenge := strings.Trim(strings.ReplaceAll(resource.Meta.Map()["dns_challenge"], "\\n", "\n"), "\"")
 	m.DnsChallenge = types.BoolValue(dnsChallenge == "true")
 	m.DnsProvider = types.StringValue(strings.Trim(strings.ReplaceAll(resource.Meta.Map()["dns_provider"], "\\n", "\n"), "\""))
-	m.DnsProviderCredentials = types.StringValue(strings.Trim(strings.ReplaceAll(resource.Meta.Map()["dns_provider_credentials"], "\\n", "\n"), "\""))
+
+	var dnsCreds string
+	json.Unmarshal([]byte(resource.Meta.Map()["dns_provider_credentials"]), &dnsCreds)
+
+	m.DnsProviderCredentials = types.StringValue(dnsCreds)
 	letsEncryptAgree := strings.Trim(strings.ReplaceAll(resource.Meta.Map()["letsencrypt_agree"], "\\n", "\n"), "\"")
 	m.LetsEncryptAgree = types.BoolValue(letsEncryptAgree == "true")
 	m.LetsEncryptEmail = types.StringValue(strings.Trim(strings.ReplaceAll(resource.Meta.Map()["letsencrypt_email"], "\\n", "\n"), "\""))
