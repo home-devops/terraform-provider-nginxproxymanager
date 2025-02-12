@@ -47,7 +47,10 @@ func (m *CertificateLetsEncrypt) Load(ctx context.Context, resource *resources.C
 	m.DnsProvider = types.StringValue(strings.Trim(strings.ReplaceAll(resource.Meta.Map()["dns_provider"], "\\n", "\n"), "\""))
 
 	var dnsCreds string
-	json.Unmarshal([]byte(resource.Meta.Map()["dns_provider_credentials"]), &dnsCreds)
+	err := json.Unmarshal([]byte(resource.Meta.Map()["dns_provider_credentials"]), &dnsCreds)
+	if err != nil {
+		diags.AddError("Failed to unmarshal dns_provider_credentials", err.Error())
+	}
 
 	m.DnsProviderCredentials = types.StringValue(dnsCreds)
 	letsEncryptAgree := strings.Trim(strings.ReplaceAll(resource.Meta.Map()["letsencrypt_agree"], "\\n", "\n"), "\"")
