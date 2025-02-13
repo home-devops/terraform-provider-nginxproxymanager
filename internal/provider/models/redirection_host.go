@@ -7,6 +7,7 @@ import (
 	"context"
 	"terraform-provider-nginxproxymanager/internal/client/inputs"
 	"terraform-provider-nginxproxymanager/internal/client/resources"
+	"terraform-provider-nginxproxymanager/internal/provider/utils"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -19,29 +20,33 @@ type RedirectionHost struct {
 	OwnerUserId types.Int64  `tfsdk:"owner_user_id"`
 	Meta        types.Map    `tfsdk:"meta"`
 
-	DomainNames       []types.String `tfsdk:"domain_names"`
-	ForwardScheme     types.String   `tfsdk:"forward_scheme"`
-	ForwardDomainName types.String   `tfsdk:"forward_domain_name"`
-	ForwardHTTPCode   types.Int64    `tfsdk:"forward_http_code"`
-	CertificateID     types.String   `tfsdk:"certificate_id"`
-	SSLForced         types.Bool     `tfsdk:"ssl_forced"`
-	HSTSEnabled       types.Bool     `tfsdk:"hsts_enabled"`
-	HSTSSubdomains    types.Bool     `tfsdk:"hsts_subdomains"`
-	HTTP2Support      types.Bool     `tfsdk:"http2_support"`
-	PreservePath      types.Bool     `tfsdk:"preserve_path"`
-	BlockExploits     types.Bool     `tfsdk:"block_exploits"`
-	AdvancedConfig    types.String   `tfsdk:"advanced_config"`
-	Enabled           types.Bool     `tfsdk:"enabled"`
+	DomainNames       types.List   `tfsdk:"domain_names"`
+	ForwardScheme     types.String `tfsdk:"forward_scheme"`
+	ForwardDomainName types.String `tfsdk:"forward_domain_name"`
+	ForwardHTTPCode   types.Int64  `tfsdk:"forward_http_code"`
+	CertificateID     types.String `tfsdk:"certificate_id"`
+	SSLForced         types.Bool   `tfsdk:"ssl_forced"`
+	HSTSEnabled       types.Bool   `tfsdk:"hsts_enabled"`
+	HSTSSubdomains    types.Bool   `tfsdk:"hsts_subdomains"`
+	HTTP2Support      types.Bool   `tfsdk:"http2_support"`
+	PreservePath      types.Bool   `tfsdk:"preserve_path"`
+	BlockExploits     types.Bool   `tfsdk:"block_exploits"`
+	AdvancedConfig    types.String `tfsdk:"advanced_config"`
+	Enabled           types.Bool   `tfsdk:"enabled"`
 }
 
 func (m *RedirectionHost) Load(ctx context.Context, resource *resources.RedirectionHost) diag.Diagnostics {
-	meta, diags := types.MapValueFrom(ctx, types.StringType, resource.Meta.Map())
+	var diags diag.Diagnostics
+	m.Meta, diags = types.MapValueFrom(ctx, types.StringType, resource.Meta.Map())
+
+	if diags.HasError() {
+		return diags
+	}
 
 	m.ID = types.Int64Value(resource.ID)
 	m.CreatedOn = types.StringValue(resource.CreatedOn)
 	m.ModifiedOn = types.StringValue(resource.ModifiedOn)
 	m.OwnerUserId = types.Int64Value(resource.OwnerUserID)
-	m.Meta = meta
 
 	m.ForwardScheme = types.StringValue(resource.ForwardScheme)
 	m.ForwardDomainName = types.StringValue(resource.ForwardDomainName)
@@ -56,9 +61,10 @@ func (m *RedirectionHost) Load(ctx context.Context, resource *resources.Redirect
 	m.AdvancedConfig = types.StringValue(resource.AdvancedConfig)
 	m.Enabled = types.BoolValue(resource.Enabled)
 
-	m.DomainNames = make([]types.String, len(resource.DomainNames))
-	for i, v := range resource.DomainNames {
-		m.DomainNames[i] = types.StringValue(v)
+	m.DomainNames, diags = types.ListValueFrom(ctx, types.StringType, resource.DomainNames)
+
+	if diags.HasError() {
+		return diags
 	}
 
 	if m.ForwardScheme.Equal(types.StringValue("$scheme")) {
@@ -69,12 +75,8 @@ func (m *RedirectionHost) Load(ctx context.Context, resource *resources.Redirect
 }
 
 func (m *RedirectionHost) Save(ctx context.Context, input *inputs.RedirectionHost) diag.Diagnostics {
-	diags := diag.Diagnostics{}
+	var diags diag.Diagnostics
 
-	input.DomainNames = make([]string, len(m.DomainNames))
-	for i, v := range m.DomainNames {
-		input.DomainNames[i] = v.ValueString()
-	}
 	input.ForwardScheme = m.ForwardScheme.ValueString()
 	input.ForwardDomainName = m.ForwardDomainName.ValueString()
 	input.ForwardHTTPCode = m.ForwardHTTPCode.ValueInt64()
@@ -86,6 +88,12 @@ func (m *RedirectionHost) Save(ctx context.Context, input *inputs.RedirectionHos
 	input.BlockExploits = m.BlockExploits.ValueBool()
 	input.AdvancedConfig = m.AdvancedConfig.ValueString()
 	input.Meta = map[string]string{}
+
+	input.DomainNames, diags = utils.ConvertListToStringSlice(m.DomainNames)
+
+	if diags.HasError() {
+		return diags
+	}
 
 	return diags
 }

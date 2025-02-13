@@ -26,23 +26,27 @@ type CertificateCustom struct {
 }
 
 func (m *CertificateCustom) Load(ctx context.Context, resource *resources.Certificate) diag.Diagnostics {
-	domainNames, diags := types.ListValueFrom(ctx, types.StringType, resource.DomainNames)
+	var diags diag.Diagnostics
 
 	m.ID = types.Int64Value(resource.ID)
 	m.CreatedOn = types.StringValue(resource.CreatedOn)
 	m.ModifiedOn = types.StringValue(resource.ModifiedOn)
-
 	m.Name = types.StringValue(resource.NiceName)
-	m.DomainNames = domainNames
 	m.ExpiresOn = types.StringValue(resource.ExpiresOn)
 	m.Certificate = types.StringValue(strings.Trim(strings.ReplaceAll(resource.Meta.Map()["certificate"], "\\n", "\n"), "\""))
 	m.CertificateKey = types.StringValue(strings.Trim(strings.ReplaceAll(resource.Meta.Map()["certificate_key"], "\\n", "\n"), "\""))
+
+	m.DomainNames, diags = types.ListValueFrom(ctx, types.StringType, resource.DomainNames)
+
+	if diags.HasError() {
+		return diags
+	}
 
 	return diags
 }
 
 func (m *CertificateCustom) Save(_ context.Context, input *inputs.CertificateCustom) diag.Diagnostics {
-	diags := diag.Diagnostics{}
+	var diags diag.Diagnostics
 
 	input.Name = m.Name.ValueString()
 	input.Certificate = m.Certificate.ValueString()

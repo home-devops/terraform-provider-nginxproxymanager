@@ -7,6 +7,7 @@ import (
 	"context"
 	"terraform-provider-nginxproxymanager/internal/client/inputs"
 	"terraform-provider-nginxproxymanager/internal/client/resources"
+	"terraform-provider-nginxproxymanager/internal/provider/utils"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -38,14 +39,18 @@ type ProxyHost struct {
 }
 
 func (m *ProxyHost) Load(ctx context.Context, resource *resources.ProxyHost) diag.Diagnostics {
-	meta, diags := types.MapValueFrom(ctx, types.StringType, resource.Meta.Map())
+	var diags diag.Diagnostics
+
+	m.Meta, diags = types.MapValueFrom(ctx, types.StringType, resource.Meta.Map())
+
+	if diags.HasError() {
+		return diags
+	}
 
 	m.ID = types.Int64Value(resource.ID)
 	m.CreatedOn = types.StringValue(resource.CreatedOn)
 	m.ModifiedOn = types.StringValue(resource.ModifiedOn)
 	m.OwnerUserId = types.Int64Value(resource.OwnerUserID)
-	m.Meta = meta
-
 	m.ForwardScheme = types.StringValue(resource.ForwardScheme)
 	m.ForwardHost = types.StringValue(resource.ForwardHost)
 	m.ForwardPort = types.Int64Value(int64(resource.ForwardPort))
@@ -61,24 +66,24 @@ func (m *ProxyHost) Load(ctx context.Context, resource *resources.ProxyHost) dia
 	m.AdvancedConfig = types.StringValue(resource.AdvancedConfig)
 	m.Enabled = types.BoolValue(resource.Enabled)
 
-	domainNames, domainNamesDiags := types.ListValueFrom(ctx, types.StringType, resource.DomainNames)
-	diags.Append(domainNamesDiags...)
-	m.DomainNames = domainNames
+	m.DomainNames, diags = types.ListValueFrom(ctx, types.StringType, resource.DomainNames)
 
-	var locations []*ProxyHostLocation
+	if diags.HasError() {
+		return diags
+	}
+
+	m.Locations = make([]*ProxyHostLocation, 0, len(resource.Locations))
 	for _, locationResponse := range resource.Locations {
 		location := &ProxyHostLocation{}
 		location.Load(ctx, &locationResponse)
-
-		locations = append(locations, location)
+		m.Locations = append(m.Locations, location)
 	}
-	m.Locations = locations
 
 	return diags
 }
 
 func (m *ProxyHost) Save(ctx context.Context, input *inputs.ProxyHost) diag.Diagnostics {
-	diags := diag.Diagnostics{}
+	var diags diag.Diagnostics
 
 	input.ForwardScheme = m.ForwardScheme.ValueString()
 	input.ForwardHost = m.ForwardHost.ValueString()
@@ -95,8 +100,11 @@ func (m *ProxyHost) Save(ctx context.Context, input *inputs.ProxyHost) diag.Diag
 	input.AdvancedConfig = m.AdvancedConfig.ValueString()
 	input.Meta = map[string]string{}
 
-	input.DomainNames = make([]string, 0, len(m.DomainNames.Elements()))
-	diags.Append(m.DomainNames.ElementsAs(ctx, &input.DomainNames, false)...)
+	input.DomainNames, diags = utils.ConvertListToStringSlice(m.DomainNames)
+
+	if diags.HasError() {
+		return diags
+	}
 
 	input.Locations = make([]inputs.ProxyHostLocation, len(m.Locations))
 	for i, v := range m.Locations {
