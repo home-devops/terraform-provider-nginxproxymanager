@@ -42,8 +42,12 @@ var RedirectionHost = map[string]schema.Attribute{
 		Description: "The HTTP code used to forward requests to the redirection host.",
 		Computed:    true,
 	},
-	"certificate_id": schema.StringAttribute{
+	"certificate_id": schema.Int64Attribute{
 		Description: "The ID of the certificate used by the redirection host.",
+		Computed:    true,
+	},
+	"certificate_new": schema.BoolAttribute{
+		Description: "Whether certificate should be created using HTTP.",
 		Computed:    true,
 	},
 	"ssl_forced": schema.BoolAttribute{

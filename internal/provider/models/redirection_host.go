@@ -5,6 +5,7 @@ package models
 
 import (
 	"context"
+	"strconv"
 	"terraform-provider-nginxproxymanager/internal/client/inputs"
 	"terraform-provider-nginxproxymanager/internal/client/resources"
 	"terraform-provider-nginxproxymanager/internal/provider/utils"
@@ -24,7 +25,8 @@ type RedirectionHost struct {
 	ForwardScheme     types.String `tfsdk:"forward_scheme"`
 	ForwardDomainName types.String `tfsdk:"forward_domain_name"`
 	ForwardHTTPCode   types.Int64  `tfsdk:"forward_http_code"`
-	CertificateID     types.String `tfsdk:"certificate_id"`
+	CertificateID     types.Int64  `tfsdk:"certificate_id"`
+	CertificateNew    types.Bool   `tfsdk:"certificate_new"`
 	SSLForced         types.Bool   `tfsdk:"ssl_forced"`
 	HSTSEnabled       types.Bool   `tfsdk:"hsts_enabled"`
 	HSTSSubdomains    types.Bool   `tfsdk:"hsts_subdomains"`
@@ -51,7 +53,7 @@ func (m *RedirectionHost) Load(ctx context.Context, resource *resources.Redirect
 	m.ForwardScheme = types.StringValue(resource.ForwardScheme)
 	m.ForwardDomainName = types.StringValue(resource.ForwardDomainName)
 	m.ForwardHTTPCode = types.Int64Value(resource.ForwardHTTPCode)
-	m.CertificateID = types.StringValue(string(resource.CertificateID))
+	m.CertificateID = types.Int64Value(resource.CertificateID)
 	m.SSLForced = types.BoolValue(resource.SSLForced)
 	m.HSTSEnabled = types.BoolValue(resource.HSTSEnabled)
 	m.HSTSSubdomains = types.BoolValue(resource.HSTSSubdomains)
@@ -80,7 +82,13 @@ func (m *RedirectionHost) Save(ctx context.Context, input *inputs.RedirectionHos
 	input.ForwardScheme = m.ForwardScheme.ValueString()
 	input.ForwardDomainName = m.ForwardDomainName.ValueString()
 	input.ForwardHTTPCode = m.ForwardHTTPCode.ValueInt64()
-	input.CertificateID = m.CertificateID.ValueString()
+
+	if m.CertificateNew.ValueBool() {
+		input.CertificateID = "new"
+	} else {
+		input.CertificateID = strconv.FormatInt(m.CertificateID.ValueInt64(), 10)
+	}
+
 	input.SSLForced = m.SSLForced.ValueBool()
 	input.HSTSEnabled = m.HSTSEnabled.ValueBool()
 	input.HSTSSubdomains = m.HSTSSubdomains.ValueBool()

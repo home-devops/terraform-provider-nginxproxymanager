@@ -34,7 +34,8 @@ Read-Only:
 - `allow_websocket_upgrade` (Boolean) Whether websocket upgrades are allowed for the proxy host.
 - `block_exploits` (Boolean) Whether exploits are blocked for the proxy host.
 - `caching_enabled` (Boolean) Whether caching is enabled for the proxy host.
-- `certificate_id` (String) The ID of the certificate used by the proxy host.
+- `certificate_id` (Number) The ID of the certificate used by the proxy host.
+- `certificate_new` (Boolean) Whether certificate should be created using HTTP.
 - `created_on` (String) The date and time the proxy host was created.
 - `domain_names` (List of String) The domain names associated with the proxy host.
 - `enabled` (Boolean) Whether the proxy host is enabled.

@@ -31,7 +31,8 @@ Read-Only:
 
 - `advanced_config` (String) The advanced configuration used by the redirection host.
 - `block_exploits` (Boolean) Whether exploits are blocked for the redirection host.
-- `certificate_id` (String) The ID of the certificate used by the redirection host.
+- `certificate_id` (Number) The ID of the certificate used by the redirection host.
+- `certificate_new` (Boolean) Whether certificate should be created using HTTP.
 - `created_on` (String) The date and time the redirection host was created.
 - `domain_names` (List of String) The domain names associated with the redirection host.
 - `enabled` (Boolean) Whether the redirection host is enabled.

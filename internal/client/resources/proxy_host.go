@@ -3,17 +3,13 @@
 
 package resources
 
-import (
-	"encoding/json"
-)
-
 type ProxyHost struct {
 	resourceWithOwner
 	DomainNames           []string                    `json:"domain_names"`
 	ForwardScheme         string                      `json:"forward_scheme"`
 	ForwardHost           string                      `json:"forward_host"`
 	ForwardPort           uint16                      `json:"forward_port"`
-	CertificateID         json.RawMessage             `json:"certificate_id"`
+	CertificateID         int64                       `json:"certificate_id"`
 	SSLForced             bool                        `json:"ssl_forced"`
 	HSTSEnabled           bool                        `json:"hsts_enabled"`
 	HSTSSubdomains        bool                        `json:"hsts_subdomains"`

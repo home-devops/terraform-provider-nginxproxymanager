@@ -50,7 +50,8 @@ resource "npm_redirection_host" "example" {
 
 - `advanced_config` (String) The advanced configuration used by the proxy host.
 - `block_exploits` (Boolean) Should we block common exploits.
-- `certificate_id` (String) Certificate ID.
+- `certificate_id` (Number) Certificate ID.
+- `certificate_new` (Boolean) Generate certificate using HTTP.
 - `hsts_enabled` (Boolean) Whether HSTS is enabled for the proxy host.
 - `hsts_subdomains` (Boolean) Whether HSTS is enabled for subdomains of the proxy host.
 - `http2_support` (Boolean) Whether HTTP/2 is supported for the proxy host.

@@ -165,14 +165,14 @@ func (r *proxyHostResource) ValidateConfig(ctx context.Context, req resource.Val
 		return
 	}
 
-	if data.SSLForced.ValueBool() && data.CertificateID.ValueString() == "" {
+	if data.SSLForced.ValueBool() && data.CertificateID.ValueInt64() == 0 && !data.CertificateNew.ValueBool() {
 		resp.Diagnostics.AddAttributeError(
 			path.Root("ssl_forced"),
 			"Certificate ID is required when SSL is forced",
 			"Certificate ID is required when SSL is forced")
 	}
 
-	if data.HTTP2Support.ValueBool() && data.CertificateID.ValueString() == "" {
+	if data.HTTP2Support.ValueBool() && data.CertificateID.ValueInt64() == 0 && !data.CertificateNew.ValueBool() {
 		resp.Diagnostics.AddAttributeError(
 			path.Root("http2_support"),
 			"Certificate ID is required when HTTP/2 Support is enabled",

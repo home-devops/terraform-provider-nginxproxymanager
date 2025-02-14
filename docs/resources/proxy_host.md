@@ -72,7 +72,8 @@ resource "npm_proxy_host" "example" {
 - `allow_websocket_upgrade` (Boolean) Whether websocket upgrades are allowed for the proxy host.
 - `block_exploits` (Boolean) Whether exploits are blocked for the proxy host.
 - `caching_enabled` (Boolean) Whether caching is enabled for the proxy host.
-- `certificate_id` (String) The ID of the certificate used by the proxy host.
+- `certificate_id` (Number) The ID of the certificate used by the proxy host.
+- `certificate_new` (Boolean) Generate certificate using HTTP.
 - `hsts_enabled` (Boolean) Whether HSTS is enabled for the proxy host.
 - `hsts_subdomains` (Boolean) Whether HSTS is enabled for subdomains of the proxy host.
 - `http2_support` (Boolean) Whether HTTP/2 is supported for the proxy host.

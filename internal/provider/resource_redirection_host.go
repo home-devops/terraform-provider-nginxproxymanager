@@ -94,7 +94,7 @@ func (r *RedirectionHostResource) ReadImpl(ctx context.Context, req resource.Rea
 
 	redirectionHost, err := r.client.GetRedirectionHost(ctx, state.ID.ValueInt64Pointer())
 	if err != nil {
-		resp.Diagnostics.AddError("Error reading proxy host", "Could not read redirection host, unexpected error: "+err.Error())
+		resp.Diagnostics.AddError("Error reading redirection host", "Could not read redirection host, unexpected error: "+err.Error())
 		return
 	}
 	if redirectionHost == nil {
@@ -157,14 +157,14 @@ func (r *RedirectionHostResource) ValidateConfig(ctx context.Context, req resour
 		return
 	}
 
-	if data.SSLForced.ValueBool() && data.CertificateID.ValueString() == "" {
+	if data.SSLForced.ValueBool() && data.CertificateID.ValueInt64() == 0 && !data.CertificateNew.ValueBool() {
 		resp.Diagnostics.AddAttributeError(
 			path.Root("ssl_forced"),
 			"Certificate ID is required when SSL is forced",
 			"Certificate ID is required when SSL is forced")
 	}
 
-	if data.HTTP2Support.ValueBool() && data.CertificateID.ValueString() == "" {
+	if data.HTTP2Support.ValueBool() && data.CertificateID.ValueInt64() == 0 && !data.CertificateNew.ValueBool() {
 		resp.Diagnostics.AddAttributeError(
 			path.Root("http2_support"),
 			"Certificate ID is required when HTTP/2 Support is enabled",

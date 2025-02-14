@@ -5,6 +5,7 @@ package models
 
 import (
 	"context"
+	"strconv"
 	"terraform-provider-nginxproxymanager/internal/client/inputs"
 	"terraform-provider-nginxproxymanager/internal/client/resources"
 	"terraform-provider-nginxproxymanager/internal/provider/utils"
@@ -24,7 +25,8 @@ type ProxyHost struct {
 	ForwardScheme         types.String         `tfsdk:"forward_scheme"`
 	ForwardHost           types.String         `tfsdk:"forward_host"`
 	ForwardPort           types.Int64          `tfsdk:"forward_port"`
-	CertificateID         types.String         `tfsdk:"certificate_id"`
+	CertificateID         types.Int64          `tfsdk:"certificate_id"`
+	CertificateNew        types.Bool           `tfsdk:"certificate_new"`
 	SSLForced             types.Bool           `tfsdk:"ssl_forced"`
 	HSTSEnabled           types.Bool           `tfsdk:"hsts_enabled"`
 	HSTSSubdomains        types.Bool           `tfsdk:"hsts_subdomains"`
@@ -54,7 +56,7 @@ func (m *ProxyHost) Load(ctx context.Context, resource *resources.ProxyHost) dia
 	m.ForwardScheme = types.StringValue(resource.ForwardScheme)
 	m.ForwardHost = types.StringValue(resource.ForwardHost)
 	m.ForwardPort = types.Int64Value(int64(resource.ForwardPort))
-	m.CertificateID = types.StringValue(string(resource.CertificateID))
+	m.CertificateID = types.Int64Value(resource.CertificateID)
 	m.SSLForced = types.BoolValue(resource.SSLForced)
 	m.HSTSEnabled = types.BoolValue(resource.HSTSEnabled)
 	m.HSTSSubdomains = types.BoolValue(resource.HSTSSubdomains)
@@ -88,7 +90,11 @@ func (m *ProxyHost) Save(ctx context.Context, input *inputs.ProxyHost) diag.Diag
 	input.ForwardScheme = m.ForwardScheme.ValueString()
 	input.ForwardHost = m.ForwardHost.ValueString()
 	input.ForwardPort = uint16(m.ForwardPort.ValueInt64())
-	input.CertificateID = m.CertificateID.ValueString()
+	if m.CertificateNew.ValueBool() {
+		input.CertificateID = "new"
+	} else {
+		input.CertificateID = strconv.FormatInt(m.CertificateID.ValueInt64(), 10)
+	}
 	input.SSLForced = m.SSLForced.ValueBool()
 	input.HSTSEnabled = m.HSTSEnabled.ValueBool()
 	input.HSTSSubdomains = m.HSTSSubdomains.ValueBool()

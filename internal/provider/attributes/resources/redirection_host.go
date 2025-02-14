@@ -84,11 +84,16 @@ var RedirectionHost = map[string]schema.Attribute{
 		Optional:    true,
 		Default:     booldefault.StaticBool(false),
 	},
-	"certificate_id": schema.StringAttribute{
+	"certificate_id": schema.Int64Attribute{
 		Description: "Certificate ID.",
 		Computed:    true,
 		Optional:    true,
-		Default:     stringdefault.StaticString("0"),
+	},
+	"certificate_new": schema.BoolAttribute{
+		Description: "Generate certificate using HTTP.",
+		Computed:    true,
+		Optional:    true,
+		Default:     booldefault.StaticBool(false),
 	},
 	"ssl_forced": schema.BoolAttribute{
 		Description: "Whether SSL is forced for the proxy host.",
