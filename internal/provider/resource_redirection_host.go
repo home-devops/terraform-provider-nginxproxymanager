@@ -157,14 +157,14 @@ func (r *RedirectionHostResource) ValidateConfig(ctx context.Context, req resour
 		return
 	}
 
-	if data.SSLForced.ValueBool() && data.CertificateID.ValueInt64() == 0 && !data.CertificateNew.ValueBool() {
+	if data.SSLForced.ValueBool() && data.CertificateID.ValueInt64() == 0 && !data.CertificateNew.ValueBool() && !data.CertificateID.IsUnknown() {
 		resp.Diagnostics.AddAttributeError(
 			path.Root("ssl_forced"),
 			"Certificate ID is required when SSL is forced",
 			"Certificate ID is required when SSL is forced")
 	}
 
-	if data.HTTP2Support.ValueBool() && data.CertificateID.ValueInt64() == 0 && !data.CertificateNew.ValueBool() {
+	if data.HTTP2Support.ValueBool() && data.CertificateID.ValueInt64() == 0 && !data.CertificateNew.ValueBool() && !data.CertificateID.IsUnknown() {
 		resp.Diagnostics.AddAttributeError(
 			path.Root("http2_support"),
 			"Certificate ID is required when HTTP/2 Support is enabled",
