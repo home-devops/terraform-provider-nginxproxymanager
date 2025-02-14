@@ -95,6 +95,7 @@ func (m *RedirectionHost) Save(ctx context.Context, input *inputs.RedirectionHos
 	input.HTTP2Support = m.HTTP2Support.ValueBool()
 	input.BlockExploits = m.BlockExploits.ValueBool()
 	input.AdvancedConfig = m.AdvancedConfig.ValueString()
+	input.PreservePath = m.PreservePath.ValueBool()
 	input.Meta = map[string]string{}
 
 	input.DomainNames, diags = utils.ConvertListToStringSlice(m.DomainNames)
