@@ -3,7 +3,7 @@ module terraform-provider-nginxproxymanager
 go 1.22.7
 
 require (
-	github.com/hashicorp/terraform-plugin-framework v1.14.0
+	github.com/hashicorp/terraform-plugin-framework v1.14.1
 	github.com/hashicorp/terraform-plugin-log v0.9.0
 )
 
